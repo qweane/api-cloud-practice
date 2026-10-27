@@ -18,7 +18,10 @@
             const response = await fetch('https://pokeapi.co/api/v2/pokemon/pikachu');
             const users = await response.json();
 
-                li.innerText = user.name + ' (Вес: ' + (user.weight ?? 'не указан') + ')';
+            list.innerHTML = '';
+                const li = document.createElement('li');
+                // Выводим имя и базовый вес (если свойство weight есть в API)
+                li.innerText = user.name + ' ' + user.weight;
                 list.appendChild(li);
 
             button.innerText = 'Данные загружены!';
