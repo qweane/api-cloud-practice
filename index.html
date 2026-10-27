@@ -1,19 +1,33 @@
-const button = document.getElementById('loadBtn');
-const list = document.getElementById('userList');
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Мой первый API клиент</title>
+</head>
+<body>
+    <h1>Список пользователей из Облака</h1>
+    <button id="loadBtn">Загрузить данные через API</button>
+    <ul id="userList"></ul>
 
-button.addEventListener('click', async () => {
-    button.innerText = 'Загрузка...';
+    <script>
+        const button = document.getElementById('loadBtn');
+        const list = document.getElementById('userList');
 
-    // Запрос данных с PokeAPI
-    const response = await fetch('https://pokeapi.co/api/v2/pokemon/pikachu');
-    const pokemon = await response.json();
+        button.addEventListener('click', async () => {
+            button.innerText = 'Загрузка...';
 
-    list.innerHTML = '';
-    
-    // Создаем элемент списка и выводим имя и базовый вес сущности
-    const li = document.createElement('li');
-    li.innerText = pokemon.name + ' (Weight: ' + pokemon.weight + ')';
-    list.appendChild(li);
+            const response = await fetch('https://pokeapi.co/api/v2/pokemon/pikachu');
+            const users = await response.json();
 
-    button.innerText = 'Данные загружены!';
-});
+            list.innerHTML = '';
+            users.forEach(user => {
+                const li = document.createElement('li');
+                // Выводим имя и базовый вес (если свойство weight есть в API)
+                li.innerText = user.name + ' (Вес: ' + (user.weight ?? 'не указан') + ')';
+                list.appendChild(li);
+            });
+
+            button.innerText = 'Данные загружены!';
+        });
+    </script>
+</body>
+</html>
