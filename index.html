@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Мой первый API клиент</title>
 </head>
 <body>
-    <h1>Список пользователей из Облака</h1>
+    <h1>Данные из Облака (PokeAPI)</h1>
     <button id="loadBtn">Загрузить данные через API</button>
     <ul id="userList"></ul>
 
@@ -14,17 +15,27 @@
 
         button.addEventListener('click', async () => {
             button.innerText = 'Загрузка...';
+            list.innerHTML = ''; // Очищаем список перед загрузкой
 
-            const response = await fetch('https://pokeapi.co/api/v2/pokemon/pikachu');
-            const users = await response.json();
+            try {
+                const response = await fetch('https://pokeapi.co/api/v2/pokemon/pikachu');
+                
+                // Проверяем, успешен ли запрос
+                if (!response.ok) throw new Error('Ошибка сети');
+                
+                const user = await response.json(); // Изменили имя переменной на user (в единственном числе)
 
-            list.innerHTML = '';
                 const li = document.createElement('li');
-                // Выводим имя и базовый вес (если свойство weight есть в API)
-                li.innerText = user.name + ' ' + user.weight;
+                // Теперь свойства name и weight будут успешно прочитаны из объекта покемона
+                li.innerText = `Имя: ${user.name} | Вес: ${user.weight}`;
                 list.appendChild(li);
 
-            button.innerText = 'Данные загружены!';
+                button.innerText = 'Данные загружены!';
+            } catch (error) {
+                console.error(error);
+                button.innerText = 'Ошибка загрузки!';
+                list.innerHTML = '<li>Не удалось получить данные</li>';
+            }
         });
     </script>
 </body>
